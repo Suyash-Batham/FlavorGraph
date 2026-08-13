@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { use } from 'react';
 
 interface IngredientDetail {
   name: string;
@@ -50,8 +49,8 @@ const STRENGTH_COLOR: Record<string, string> = {
   subtle: 'bg-stone-600',
 };
 
-export default function IngredientPage({ params }: { params: Promise<{ name: string }> }) {
-  const { name } = use(params);
+export default function IngredientPage({ params }: { params: { name: string } }) {
+  const name = params.name;
   const decoded = decodeURIComponent(name);
 
   const [data, setData] = useState<PageData | null>(null);
@@ -59,14 +58,24 @@ export default function IngredientPage({ params }: { params: Promise<{ name: str
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`/api/pairings/${encodeURIComponent(decoded)}`)
-      .then(async (res) => {
-        const j = await res.json();
-        if (!res.ok) throw new Error(j.error ?? 'Failed to load');
+    (async () => {
+      try {
+        const res = await fetch(`/api/pairings/${encodeURIComponent(decoded)}`);
+        const text = await res.text();
+        let j: any;
+        try {
+          j = JSON.parse(text);
+        } catch (parseErr) {
+          throw new Error(`Invalid JSON response from server: ${text.slice(0, 200)}`);
+        }
+        if (!res.ok) throw new Error(j.error ?? `Failed to load (${res.status})`);
         setData(j);
-      })
-      .catch((e) => setError(e.message))
-      .finally(() => setLoading(false));
+      } catch (e) {
+        setError(e instanceof Error ? e.message : String(e));
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, [decoded]);
 
   if (loading) {
