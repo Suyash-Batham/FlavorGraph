@@ -7,19 +7,22 @@ export async function GET(
 ) {
   const name = decodeURIComponent(params.name);
   try {
-    const [ingredient, pairings, bridges, neighbourhood] = await Promise.all([
-      getIngredient(name),
-      getDirectPairings(name),
-      getFlavorBridges(name),
-      getNeighbourhood(name),
-    ]);
-
+    // Resolve ingredient first (case-insensitive), then fetch related data using the
+    // canonical name returned by `getIngredient` to ensure exact matches for other queries.
+    const ingredient = await getIngredient(name);
     if (!ingredient) {
       return NextResponse.json({ error: 'Ingredient not found' }, { status: 404 });
     }
 
+    const canonical = ingredient.name;
+    const [pairings, bridges, neighbourhood] = await Promise.all([
+      getDirectPairings(canonical),
+      getFlavorBridges(canonical),
+      getNeighbourhood(canonical),
+    ]);
+
     const pairedNames = pairings.map((p) => p.name);
-    const dishes = await getDishesForIngredients([name, ...pairedNames.slice(0, 3)]);
+    const dishes = await getDishesForIngredients([canonical, ...pairedNames.slice(0, 3)]);
 
     return NextResponse.json({ ingredient, pairings, bridges, dishes, neighbourhood });
   } catch (err) {
