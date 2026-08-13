@@ -16,9 +16,7 @@ function getDriver(): Driver {
       maxConnectionPoolSize: 50,
       connectionAcquisitionTimeout: 10000,
       connectionTimeout: 15000,
-      // bolt+s:// uses TLS; trust system CA bundle (works with CognoDB's signed cert)
-      encrypted: 'ENCRYPTION_ON',
-      trust: 'TRUST_SYSTEM_CA_SIGNED_CERTIFICATES',
+      // TLS/trust is configured via the URI (bolt+s://). Do not set both URL and config.
     });
   }
   return _driver;
@@ -31,7 +29,30 @@ export async function query<T extends RecordShape>(
   const session = getDriver().session();
   try {
     const result: QueryResult<T> = await session.run(cypher, params);
-    return result.records.map((r) => r.toObject() as T);
+    // Convert Neo4j Integer objects (and nested values) to plain JS numbers/values
+    function convertValue(v: any): any {
+      if (v === null || v === undefined) return v;
+      // neo4j Integer has toNumber()
+      if (typeof v === 'object' && v !== null && typeof v.toNumber === 'function') {
+        return v.toNumber();
+      }
+      if (Array.isArray(v)) return v.map(convertValue);
+      if (typeof v === 'object') {
+        const out: Record<string, any> = {};
+        for (const [k, val] of Object.entries(v)) {
+          out[k] = convertValue(val);
+        }
+        return out;
+      }
+      return v;
+    }
+
+    return result.records.map((r) => {
+      const obj = r.toObject() as Record<string, any>;
+      const converted: Record<string, any> = {};
+      for (const [k, v] of Object.entries(obj)) converted[k] = convertValue(v);
+      return converted as T;
+    });
   } finally {
     await session.close();
   }
