@@ -2,8 +2,7 @@
 
 > **CognoDB Take-Home Assignment** · A graph-database-backed web application that lets you explore ingredient flavor pairings, discover 2-hop flavor bridges, and find the shortest pairing path between any two ingredients.
 
-**Live demo:** 
-**Screen recording:** 
+**Live demo:**  https://flavor-graph-zeta.vercel.app/
 
 **Security note:** Do NOT commit `./.env.local` or any file containing `COGNODB_URI`/`COGNODB_PASSWORD`. If you accidentally exposed credentials, rotate the CognoDB password immediately from the console before sharing the repo or demo link.
 
@@ -127,19 +126,16 @@ npm run dev
 
 ---
 
-## Deploying to Vercel (free)
-
-```bash
-npm i -g vercel
-vercel
-# Add environment variables in the Vercel dashboard:
-#   COGNODB_URI  =  bolt+s://...
-#   COGNODB_PASSWORD  =  ...
-```
-
----
 
 ## Screenshots
+
+| Feature               | Query / Route                  | Key Highlights Shown                                   |                          Screenshot                          |
+| :-------------------- | :----------------------------- | :----------------------------------------------------- | :----------------------------------------------------------: |
+| **Quick Search**      | Search: `espresso`             | • Matching Results<br>• Loading State<br>• Empty State |      `![Quick Search](Screenshots/Quick%20Search.jpeg)`      |
+| **Partial Match**     | Search: `choc`                 | • Substring Search (`CONTAINS`)                        |      `![Partial Match](Screenshots/Partial%20Match.png)`     |
+| **Ingredient Detail** | `/ingredient/Espresso`         | • Pairings & Dishes<br>• Flavor Badges *(1-Hop)*       | `![Ingredient Detail](Screenshots/Ingredient%20Detail.jpeg)` |
+| **Flavor Bridges**    | `/ingredient/Dark%20Chocolate` | • Shared Flavors *(2-Hop Connections)*                 |     `![Flavor Bridges](Screenshots/Flavor%20Bridge.png)`     |
+| **Dish Finder**       | Search: `Chilli`               | • Dishes Aggregation (`MATCH + collect`)               |       `![Dish Finder](Screenshots/Dish%20Finder.jpeg)`       |
 
 
 
