@@ -30,7 +30,7 @@ export async function query<T extends RecordShape>(
   try {
     const result: QueryResult<T> = await session.run(cypher, params);
     // Convert Neo4j Integer objects (and nested values) to plain JS numbers/values
-    function convertValue(v: any): any {
+    const convertValue = (v: any): any => {
       if (v === null || v === undefined) return v;
       // neo4j Integer has toNumber()
       if (typeof v === 'object' && v !== null && typeof v.toNumber === 'function') {
@@ -45,7 +45,7 @@ export async function query<T extends RecordShape>(
         return out;
       }
       return v;
-    }
+    };
 
     return result.records.map((r) => {
       const obj = r.toObject() as Record<string, any>;
