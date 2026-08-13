@@ -4,7 +4,7 @@
 
 **Live demo:**  https://flavor-graph-zeta.vercel.app/
 
-**Security note:** Do NOT commit `./.env.local` or any file containing `COGNODB_URI`/`COGNODB_PASSWORD`. If you accidentally exposed credentials, rotate the CognoDB password immediately from the console before sharing the repo or demo link.
+**Security note:** Do NOT commit `./.env.local` or any file containing `COGNODB_URI`/`COGNODB_PASSWORD`. If credentials are accidentally exposed, please rotate the CognoDB password immediately.
 
 ---
 
@@ -23,7 +23,55 @@ Graph traversal is the primary operation — not filtering rows in a table. A re
 
 ---
 
-## Data model
+## Data Models
+
+
+### Core Data Model below:
+
+```
+                               ┌──────────────────────┐
+                               │       Flavor         │
+                               │──────────────────────│
+                               │ name                 │
+                               └──────────▲───────────┘
+                                          │
+                                       HAS_FLAVOR
+                                          │
+                                          │
+             ┌────────────────────────────┴────────────────────────────┐
+             │                                                         │
+             │                                                         │
+┌────────────┴─────────────┐              PAIRS_WITH      ┌────────────┴─────────────┐
+│       Ingredient         │◄────────────────────────────►│       Ingredient         │
+│──────────────────────────│       { strength }           │──────────────────────────│
+│ name                     │                              │ name                     │
+│ description              │                              │ description              │
+│ category                 │                              │ category                 │
+└────────────┬─────────────┘                              └────────────┬─────────────┘
+             │                                                         │
+             │ USED_IN                                                 │ USED_IN
+             ▼                                                         ▼
+      ┌───────────────┐                                         ┌───────────────┐
+      │     Dish      │                                         │     Dish      │
+      │───────────────│                                         │               │
+      │ name          │                                         │ name          │
+      └───────┬───────┘                                         └───────┬───────┘
+              │                                                         │
+              │ BELONGS_TO                                              │ BELONGS_TO
+              └──────────────────────┐       ┌──────────────────────────┘
+                                     ▼       ▼
+                              ┌──────────────────┐
+                              │     Cuisine      │
+                              │──────────────────│
+                              │ name             │
+                              └──────────────────┘
+
+
+Ingredient ─────────── SUBSTITUTES_FOR ───────────► Ingredient
+
+```
+
+### Compact form Model:
 
 ```
 (:Ingredient {name, description, category})
