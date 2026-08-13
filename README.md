@@ -129,13 +129,15 @@ npm run dev
 
 ## Screenshots
 
-| Feature               | Query / Route                  | Key Highlights Shown                                   |                          Screenshot                          |
-| :-------------------- | :----------------------------- | :----------------------------------------------------- | :----------------------------------------------------------: |
-| **Quick Search**      | Search: `espresso`             | • Matching Results<br>• Loading State<br>• Empty State |      `![Quick Search](Screenshots/Quick-Search.jpeg)`      |
-| **Partial Match**     | Search: `choc`                 | • Substring Search (`CONTAINS`)                        |      `![Partial Match](Screenshots/Partial-Match.png)`     |
-| **Ingredient Detail** | `/ingredient/Espresso`         | • Pairings & Dishes<br>• Flavor Badges *(1-Hop)*       | `![Ingredient Detail](Screenshots/Ingredient-Detail.jpeg)` |
-| **Flavor Bridges**    | `/ingredient/Dark%20Chocolate` | • Shared Flavors *(2-Hop Connections)*                 |     `![Flavor Bridges](Screenshots/Flavor-Bridge.png)`     |
-| **Dish Finder**       | Search: `Chilli`               | • Dishes Aggregation (`MATCH + collect`)               |       `![Dish Finder](Screenshots/Dish-Finder.jpeg)`       |
+## 📷 Screenshots
+
+| Feature | Query / Route | Key Highlights Shown | Screenshot |
+| :--- | :--- | :--- | :---: |
+| **Quick Search** | Search: `espresso` | • Matching Results<br>• Loading State<br>• Empty State | ![Quick Search](Screenshots/Quick-Search.png) |
+| **Partial Match** | Search: `choc` | • Substring Search (`CONTAINS`) | ![Partial Match](Screenshots/Partial-Match.png) |
+| **Ingredient Detail** | `/ingredient/Espresso` | • Pairings & Dishes<br>• Flavor Badges *(1-Hop)* | ![Ingredient Detail](Screenshots/Ingredient-Detail.jpeg) |
+| **Flavor Bridges** | `/ingredient/Dark%20Chocolate` | • Shared Flavors *(2-Hop Connections)* | ![Flavor Bridges](Screenshots/Flavor-Bridge.png) |
+| **Dish Finder** | Search: `Chilli` | • Dishes Aggregation (`MATCH + collect`) | ![Dish Finder](Screenshots/Dish-Finder.jpeg) |
 
 
 
