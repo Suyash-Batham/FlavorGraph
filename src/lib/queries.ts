@@ -55,7 +55,8 @@ export async function getIngredient(name: string) {
     flavors: string[];
     dishes: string[];
   }>(`
-    MATCH (i:Ingredient {name: $name})
+    MATCH (i:Ingredient)
+    WHERE toLower(i.name) = toLower($name)
     OPTIONAL MATCH (i)-[:HAS_FLAVOR]->(f:Flavor)
     OPTIONAL MATCH (i)-[:USED_IN]->(d:Dish)
     RETURN
@@ -109,7 +110,15 @@ export async function getFlavorPath(from: string, to: string): Promise<PathStep 
     )
     RETURN [n IN nodes(p) | n.name] AS path, length(p) AS hops
   `, { from, to });
-  return rows[0] ?? null;
+  const row = rows[0];
+  if (!row) return null;
+  // Neo4j integer values may be returned as objects with { low, high }.
+  // Coerce to a JS number if necessary.
+  const hopsAny = (row as any).hops;
+  const hops = typeof hopsAny === 'object' && hopsAny !== null && typeof hopsAny.toNumber === 'function'
+    ? hopsAny.toNumber()
+    : Number(hopsAny);
+  return { path: row.path, hops };
 }
 
 // Graph data for a neighbourhood around one ingredient (for visualisation)
