@@ -188,6 +188,15 @@ npm run dev
 | **Dish Finder** | Search: `Chilli` | • Dishes Aggregation (`MATCH + collect`) | ![Dish Finder](Screenshots/Dish-Finder.jpeg) |
 
 
+### 🗄️ CognoDB Graph Visualization
+
+The screenshot below shows the seeded Flavor Graph data visualized in the CognoDB console, including **44 nodes** and **149 relationships** across Ingredient, Flavor, and Dish entities.
+
+<img width="1911" height="965" alt="image" src="https://github.com/user-attachments/assets/7b008de9-697f-4452-944d-30cdf45685ec" />
+
+<img width="1912" height="952" alt="image" src="https://github.com/user-attachments/assets/78c86552-5b73-4188-baef-e8902662dd83" />
+
+
 
 ---
 
